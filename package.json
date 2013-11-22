@@ -1,0 +1,32 @@
+{
+  "name": "dispatch-proxy",
+  "description": "A SOCKS5/HTTP proxy that balances traffic between multiple internet connections.",
+  "author": "Alexandre Kirszenberg <a.kirszenberg@gmail.com>",
+  "version": "0.0.1",
+
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:morhaus/dispatch-proxy.git"
+  },
+
+  "bin": {
+    "dispatch": "./bin/dispatch"
+  },
+
+  "scripts": {
+    "pre-publish": "grunt"
+  },
+
+  "dependencies": {
+    "commander": "2.0.0",
+    "cli-color": "0.2.3"
+  },
+
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-cli": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-contrib-clean": "*"
+  }
+}
