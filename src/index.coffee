@@ -1,7 +1,7 @@
 os = require 'os'
 { print } = require 'util'
 program = require 'commander'
-clc = require 'cli-color'
+colog = require 'colog'
 SocksDispatcher = require './dispatcher/socks'
 HttpDispatcher = require './dispatcher/http'
 
@@ -15,14 +15,14 @@ program
     interfaces = os.networkInterfaces()
 
     for name, addrs of interfaces
-      print clc.green(name) + '\n'
+      print (colog.green name) + '\n'
 
       for { address, family, internal } in addrs
-        print '  ' + clc.cyan(address)
+        print '  ' + (colog.cyan address)
         opts = []
         opts.push family if family
         opts.push 'internal' if internal
-        print clc.blackBright(" (#{opts.join ', '})") if opts.length > 0
+        print " (#{opts.join ', '})" if opts.length > 0
         print '\n'
 
       print '\n'
@@ -51,14 +51,20 @@ program
 
     if http
       type = 'HTTP'
-      new HttpDispatcher addresses, port, host
+      dispatcher = new HttpDispatcher addresses, port, host
     else
       type = 'SOCKS5'
-      new SocksDispatcher addresses, port, host
+      dispatcher = new SocksDispatcher addresses, port, host
 
-    print clc.blackBright("#{type} server started on ") + clc.green("#{host}:#{port}") + '\n'
-    print clc.blackBright('Dispatching to addresses ')
-    print (clc.cyan("#{address}@#{priority}") for { address, priority } in addresses).join clc.blackBright(', ')
+    print "#{type} server started on " + (colog.green "#{host}:#{port}") + '\n'
+    print 'Dispatching to addresses '
+    print (colog.cyan "#{address}@#{priority}" for { address, priority } in addresses).join ', '
     print '\n'
+
+    dispatcher.on 'error', ({ type, host, port, localAddress }, err) ->
+      if type is 'server'
+        print (colog.red "#{type} error")
+      else
+        print (colog.red "#{type} error: ") + "#{host}:#{port} on #{localAddress.address}"
 
 program.parse process.argv

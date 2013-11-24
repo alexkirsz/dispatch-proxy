@@ -20,7 +20,7 @@
   "dependencies": {
     "coffee-script": "1.6.3",
     "commander": "2.0.0",
-    "cli-color": "0.2.3"
+    "colog": "1.0.1"
   },
 
   "devDependencies": {

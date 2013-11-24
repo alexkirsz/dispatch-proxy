@@ -1,5 +1,5 @@
 net = require 'net'
-clc = require 'cli-color'
+colog = require 'colog'
 socks = require '../socks'
 Dispatcher = require './'
 
@@ -19,26 +19,23 @@ module.exports = class SocksDispatcher extends Dispatcher
         localAddress: localAddress.address
 
       serverConnection
-        .on 'error', (err) ->
-          console.log '\n' + clc.red('serverConnection error: ') + clc.blackBright("#{host}:#{port} on #{localAddress.address}")
-          console.log clc.blackBright(err.stack)
+        .on 'error', (err) =>
           clientConnection.end()
+          @emit 'error', { type: 'serverConnection', host, port, localAddress }, err
         .on 'end', =>
           @connectionsTotal--
           delete @connectionsByAddress[localAddress.address] if --@connectionsByAddress[localAddress.address] is 0
 
       clientConnection
         .on 'error', (err) ->
-          console.log '\n' + clc.red('clientConnection error: ') + clc.blackBright("#{host}:#{port} on #{localAddress.address}")
-          console.log clc.blackBright(err.stack)
           serverConnection.end()
+          @emit 'error', { type: 'clientConnection', host, port, localAddress }, err
 
       clientConnection.pipe serverConnection
       serverConnection.pipe clientConnection
 
-    @server.on 'error', (err) ->
-      console.log clc.red('server error')
-      console.log clc.blackBright(err.stack)
+    @server.on 'error', (err) =>
+      @emit 'error', type: 'server', err
 
     @server.listen listenPort, listenHost
 

@@ -1,7 +1,8 @@
 net = require 'net'
+{ EventEmitter } = require 'events'
 socks = require './socks'
 
-module.exports = class Dispatcher
+module.exports = class Dispatcher extends EventEmitter
   constructor: (@addresses, port, host) ->
     @connectionsTotal = 0
     @connectionsByAddress = {}
