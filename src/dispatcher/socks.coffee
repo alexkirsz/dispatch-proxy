@@ -9,9 +9,6 @@ module.exports = class SocksDispatcher extends Dispatcher
 
     @server = socks.createServer (clientConnection, { host, port }) =>
       localAddress = @dispatchAddress()
-      @connectionsByAddress[localAddress.address] or= 0
-      @connectionsByAddress[localAddress.address]++
-      @connectionsTotal++
 
       serverConnection = net.createConnection
         port: port
@@ -19,6 +16,10 @@ module.exports = class SocksDispatcher extends Dispatcher
         localAddress: localAddress.address
 
       serverConnection
+        .on 'connect', =>
+          @connectionsByAddress[localAddress.address] or= 0
+          @connectionsByAddress[localAddress.address]++
+          @connectionsTotal++
         .on 'error', (err) =>
           clientConnection.end()
           @emit 'error', { type: 'serverConnection', host, port, localAddress }, err
@@ -27,7 +28,7 @@ module.exports = class SocksDispatcher extends Dispatcher
           delete @connectionsByAddress[localAddress.address] if --@connectionsByAddress[localAddress.address] is 0
 
       clientConnection
-        .on 'error', (err) ->
+        .on 'error', (err) =>
           serverConnection.end()
           @emit 'error', { type: 'clientConnection', host, port, localAddress }, err
 

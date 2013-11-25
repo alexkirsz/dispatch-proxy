@@ -76,6 +76,9 @@ class SocksServer extends EventEmitter
 
     @emit 'connection', clientConnection, { host, port }
 
+  getConnections: (args...) =>
+    @server.getConnections args...
+
   listen: (args...) =>
     @server.listen args...
 

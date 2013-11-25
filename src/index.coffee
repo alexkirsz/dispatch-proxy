@@ -56,15 +56,21 @@ program
       type = 'SOCKS5'
       dispatcher = new SocksDispatcher addresses, port, host
 
-    print "#{type} server started on " + (colog.green "#{host}:#{port}") + '\n'
-    print 'Dispatching to addresses '
-    print (colog.cyan "#{address}@#{priority}" for { address, priority } in addresses).join ', '
-    print '\n'
+    console.log """
+      #{type} server started on #{colog.green "#{host}:#{port}"}
+      Dispatching to addresses #{(colog.cyan "#{address}@#{priority}" for { address, priority } in addresses).join ', '}
+    """
 
     dispatcher.on 'error', ({ type, host, port, localAddress }, err) ->
       if type is 'server'
-        print (colog.red "#{type} error")
+        console.log """
+          #{colog.red "#{type} error"}
+        """
       else
-        print (colog.red "#{type} error: ") + "#{host}:#{port} on #{localAddress.address}"
+        console.log """
+          #{colog.red "#{type} error: "} #{host}:#{port} on #{localAddress.address}
+        """
+
+      print err.stack
 
 program.parse process.argv
