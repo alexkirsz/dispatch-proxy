@@ -5,7 +5,7 @@ Rationale
 ---------
 You often find yourself with multiple unused internet connections, be it a 3G/4G mobile subscription or a free wifi hotspot, that your system wont let you use together with your main one.
 
-For example, my residence provides me with a cabled and wireless internet access. Both are capped at 1.200kB/s download/upload speed, but they can simultaneously run at full speed. My mobile internet access also provides me with 400kB/s download/upload speed. Combine all these with `dispatch` and a threaded download manager and you get a 2.800kB/s download and upload speed limit, which is considerably better :)
+For example, my residence provides me with a cabled and wireless internet access. Both are capped at 1,200kB/s download/upload speed, but they can simultaneously run at full speed. My mobile internet access also provides me with 400kB/s download/upload speed. Combine all these with `dispatch` and a threaded download manager and you get a 2,800kB/s download and upload speed limit, which is considerably better :)
 Installation
 ------------
 You'll need to have Node.JS installed on your system.
