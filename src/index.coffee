@@ -32,7 +32,7 @@ program
   .usage('[options] [addresses]')
   .description('start a proxy server')
   .option('-H, --host <h>', 'which host to accept connections from (defaults to localhost)', String)
-  .option('-p, --port <p>', 'which port to listen to for connections (defaults to 55667)', Number)
+  .option('-p, --port <p>', 'which port to listen to for connections (defaults to 8080 for HTTP proxy, 1080 for SOCKS proxy)', Number)
   .option('--http', 'start an http proxy server', Boolean)
   .action (args..., { port, host, http, https }) ->
     addresses = []
@@ -46,13 +46,14 @@ program
         priority = if priority then (parseInt priority) else 1
         addresses.push { address, priority }
 
-    port or= 55667
     host or= 'localhost'
 
     if http
+      port or= 8080
       type = 'HTTP'
       dispatcher = new HttpDispatcher addresses, port, host
     else
+      port or= 1080
       type = 'SOCKS5'
       dispatcher = new SocksDispatcher addresses, port, host
 

@@ -20,7 +20,7 @@ module.exports = class HttpDispatcher extends Dispatcher
       options.headers = clientRequest.headers
       options.agent = agent
 
-      serverRequest = @createRequest options
+      serverRequest = http.request options
 
       clientRequest.pipe serverRequest
 
@@ -37,6 +37,3 @@ module.exports = class HttpDispatcher extends Dispatcher
         delete @connectionsByAddress[localAddress.address] if --@connectionsByAddress[localAddress.address] is 0
 
     @server.listen port, host
-
-  createRequest: (options) ->
-    http.request options

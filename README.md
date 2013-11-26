@@ -17,7 +17,7 @@ The module provides a simple command-line utility called `dispatch`.
 ```
 $ dispatch start
 ```
-Start a SOCKS proxy server on `localhost:55667`. Simply add this address as a SOCKS proxy in your system settings and your traffic will be automatically balanced between all available internet connections.
+Start a SOCKS proxy server on `localhost:1080`. Simply add this address as a SOCKS proxy in your system settings and your traffic will be automatically balanced between all available internet connections.
 Usage
 -----
 ```
@@ -44,7 +44,7 @@ $ dispatch start -h
 
     -h, --help      output usage information
     -H, --host <h>  which host to accept connections from (defaults to localhost)
-    -p, --port <p>  which port to listen to for connections (defaults to 55667)
+    -p, --port <p>  which port to listen to for connections (defaults to 8080 for HTTP proxy, 1080 for SOCKS proxy)
     --http          start an http proxy server
 ```
 Examples
@@ -52,7 +52,7 @@ Examples
 ```
 $ dispatch start --http
 ```
-Start an HTTP proxy server listening on port `55667`, dispatching connections to every non-internal IPv4 local addresses.
+Start an HTTP proxy server listening on `localhost:8080`, dispatching connections to every non-internal IPv4 local addresses.
 ```
 $ dispatch start 10.0.0.0 10.0.0.1
 ```
