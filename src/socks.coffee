@@ -60,8 +60,8 @@ class SocksServer extends EventEmitter
     addressType = data.byte()
     host =
       switch addressType
-        when ADDRTYPE.IPV4 then u.formatIPv4 (data.byte 4)
-        when ADDRTYPE.IPV6 then u.formatIPv6 (data.byte 16)
+        when ADDRTYPE.IPV4 then u.formatIPv4 (data.read 4)
+        when ADDRTYPE.IPV6 then u.formatIPv6 (data.read 16)
         when ADDRTYPE.DOMAIN then data.char data.byte()
     port = data.uint16()
 

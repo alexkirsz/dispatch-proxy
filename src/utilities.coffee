@@ -3,7 +3,7 @@ exports.toUInt16BE = (value) -> [(value & 0xff00) >>> 8, value & 0x00ff]
 exports.toUInt32LE = (value) -> [value & 0xff, (value >>> 8) & 0xff, (value >>> 16) & 0xff, (value >>> 24) & 0xff]
 exports.toUInt32BE = (value) -> [(value >>> 24) & 0xff, (value >>> 16) & 0xff, (value >>> 8) & 0xff, value & 0xff]
 
-exports.formatIPv4 = (value) -> value.join '.'
+exports.formatIPv4 = (value) -> Array::join.call value, '.'
 
 exports.formatIPv6 = (value) ->
   if not Buffer.isBuffer value
