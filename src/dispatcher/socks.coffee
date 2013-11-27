@@ -15,28 +15,22 @@ module.exports = class SocksDispatcher extends Dispatcher
         host: host
         localAddress: localAddress.address
 
+      @emit 'connection', { client: clientConnection, server: serverConnection, localAddress, host, port }
+
       serverConnection
         .on 'connect', =>
           @connectionsByAddress[localAddress.address] or= 0
           @connectionsByAddress[localAddress.address]++
           @connectionsTotal++
-        .on 'error', (err) =>
-          clientConnection.end()
-          @emit 'error', { type: 'serverConnection', host, port, localAddress }, err
         .on 'end', =>
           @connectionsTotal--
           delete @connectionsByAddress[localAddress.address] if --@connectionsByAddress[localAddress.address] is 0
-
-      clientConnection
-        .on 'error', (err) =>
-          serverConnection.end()
-          @emit 'error', { type: 'clientConnection', host, port, localAddress }, err
 
       clientConnection.pipe serverConnection
       serverConnection.pipe clientConnection
 
     @server.on 'error', (err) =>
-      @emit 'error', type: 'server', err
+      @emit 'error', err
 
     @server.listen listenPort, listenHost
 
