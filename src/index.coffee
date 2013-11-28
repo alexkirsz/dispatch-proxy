@@ -54,7 +54,7 @@ program
   .option('--http', 'start an http proxy server', Boolean)
   .option('--debug', 'logs connections and errors', Boolean)
   .action (args..., { port, host, http, https, debug }) ->
-    logger.debugMode 'debug' if debug
+    logger.setMode 'debug' if debug
 
     addresses = []
     if args.length is 0

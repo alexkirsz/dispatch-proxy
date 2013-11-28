@@ -81,7 +81,7 @@ module.exports = class Logger
     return @
 
   emit: (event, data, options = {}) =>
-    return if @_debugMode? and @_modes[@_debugMode] isnt true and (@debugMode is false or event not in @_modes[@_debugMode])
+    return if @_mode? and @_modes[@_mode] isnt true and (@_mode is false or event not in @_modes[@_mode])
 
     event = if @_events[event] then @_events[event] else @_parse event
     data = if options.raw then data else @format data
@@ -107,13 +107,13 @@ module.exports = class Logger
 
     return @
 
-  debugMode: (mode) ->
-    throw (new Error 'Unknown debug mode') if mode not of @_modes
-    @_debugMode = mode
+  setMode: (mode) ->
+    throw (new Error "Unknown mode (#{mode})") if mode not of @_modes
+    @_mode = mode
     return @
 
   registerMode: (name, events) ->
-    @_debugMode or= name if name is 'default'
+    @_mode or= name if name is 'default'
     @_modes[name] = events
     return @
 
