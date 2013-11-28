@@ -1,21 +1,18 @@
 http = require 'http'
 url = require 'url'
-Dispatcher = require './'
+{ EventEmitter } = require 'events'
 
-module.exports = class HttpDispatcher extends Dispatcher
-  constructor: (@addresses, port, host) ->
+module.exports = class HttpProxy extends EventEmitter
+  constructor: (dispatcher, listenPort, listenHost) ->
     super
 
     agent = new http.Agent maxSockets: Infinity
 
     @server = http.createServer (clientRequest, clientResponse) =>
-      localAddress = @dispatchAddress()
-      @connectionsByAddress[localAddress.address] or= 0
-      @connectionsByAddress[localAddress.address]++
-      @connectionsTotal++
+      localAddress = dispatcher.dispatch()
 
       options = url.parse clientRequest.url
-      options.localAddress = localAddress.address
+      options.localAddress = localAddress
       options.method = clientRequest.method
       options.headers = clientRequest.headers
       options.agent = agent
@@ -29,11 +26,12 @@ module.exports = class HttpDispatcher extends Dispatcher
           clientResponse.writeHead serverResponse.statusCode, serverResponse.headers
           serverResponse.pipe clientResponse
         .on 'error', (error) ->
-          serverRequest.removeAllListeners()
-          clientResponse.destroy()
+          clientResponse.writeHead 502 # Bad gateway
+          clientResponse.end()
 
-      clientResponse.on 'end', =>
-        @connectionsTotal--
-        delete @connectionsByAddress[localAddress.address] if --@connectionsByAddress[localAddress.address] is 0
+      serverRequest.on 'end', ->
+        dispatcher.free localAddress
 
-    @server.listen port, host
+      @emit 'request', { clientRequest, serverRequest, localAddress }
+
+    @server.listen listenPort, listenHost

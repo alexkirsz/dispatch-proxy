@@ -18,8 +18,7 @@
   },
 
   "dependencies": {
-    "commander": "2.0.0",
-    "colog": "1.0.1"
+    "commander": "2.0.0"
   },
 
   "devDependencies": {

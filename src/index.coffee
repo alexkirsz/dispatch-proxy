@@ -2,9 +2,28 @@ os = require 'os'
 { print } = require 'util'
 crypto = require 'crypto'
 program = require 'commander'
-colog = require 'colog'
-SocksDispatcher = require './dispatcher/socks'
-HttpDispatcher = require './dispatcher/http'
+Logger = require './logger'
+Dispatcher = require './dispatcher'
+SocksProxy = require './proxy/socks'
+HttpProxy = require './proxy/http'
+
+logger = { log, emit } = new Logger(tab: 10)
+  .registerStyle('default', ['grey'])
+  .registerStyle('b', ['bold'])
+  .registerStyle('s', ['green']) # Success
+  .registerStyle('i', ['cyan']) # Info
+  .registerStyle('e', ['red']) # Error
+  .registerStyle('a', ['b', 'black']) # Address
+
+  .registerEvent('request', '<b-i>request')
+  .registerEvent('dispatch', '<b-i>dispatch')
+  .registerEvent('connect', '<b-s>connect')
+  .registerEvent('response', '<b-s>response')
+  .registerEvent('error', '<b-e>error')
+  .registerEvent('end', '<b-i>end')
+
+  .registerMode('default', ['error'])
+  .registerMode('debug', true)
 
 program
   .version('0.0.1')
@@ -16,17 +35,15 @@ program
     interfaces = os.networkInterfaces()
 
     for name, addrs of interfaces
-      print (colog.green name) + '\n'
+      log "<green>#{name}</green>"
 
       for { address, family, internal } in addrs
-        print '  ' + (colog.cyan address)
         opts = []
         opts.push family if family
         opts.push 'internal' if internal
-        print " (#{opts.join ', '})" if opts.length > 0
-        print '\n'
+        log "    <a>#{address}</>" + if opts.length > 0 then " <i>(#{opts.join ', '})</>" else ''
 
-      print '\n'
+      log ''
 
 program
   .command('start')
@@ -37,6 +54,8 @@ program
   .option('--http', 'start an http proxy server', Boolean)
   .option('--debug', 'logs connections and errors', Boolean)
   .action (args..., { port, host, http, https, debug }) ->
+    logger.debugMode 'debug' if debug
+
     addresses = []
     if args.length is 0
       for name, addrs of os.networkInterfaces()
@@ -49,63 +68,78 @@ program
         addresses.push { address, priority }
 
     host or= 'localhost'
+    dispatcher = new Dispatcher addresses
 
     if http
       port or= 8080
       type = 'HTTP'
-      dispatcher = new HttpDispatcher addresses, port, host
+      proxy = new HttpProxy dispatcher, port, host
+
+      proxy
+        .on 'request', ({ clientRequest, serverRequest, localAddress }) ->
+          id = (crypto.randomBytes 3).toString 'hex'
+
+          emit 'request', "[#{id}] <a>#{clientRequest.url}</>"
+          emit 'dispatch', "[#{id}] <a>#{localAddress}</>"
+
+          serverRequest
+            .on 'response', (serverResponse) ->
+              emit 'response', "[#{id}] <magenta-b>#{serverResponse.statusCode}</>"
+
+            .on 'error', (err) ->
+              emit 'error', "[#{id}] serverRequest\n#{err.stack}"
+
+            .on 'end', ->
+              emit 'end', "[#{id}] serverRequest"
+
+          clientRequest
+            .on 'error', (err) ->
+              emit 'error', "[#{id}] clientRequest\n#{err.stack}"
+
+            .on 'end', ->
+              emit 'end', "[#{id}] clientRequest"
+
+        .on 'error', (err) ->
+          emit 'error', "server\n#{err.stack}", raw: true
+
     else
       port or= 1080
       type = 'SOCKS5'
-      dispatcher = new SocksDispatcher addresses, port, host
+      proxy = new SocksProxy dispatcher, port, host
 
-      if debug
-        dispatcher
-          .on 'connection', ({ client, server, host, port, localAddress }) ->
-            id = (crypto.randomBytes 3).toString 'hex'
+      proxy
+        .on 'request', ({ serverConnection, clientConnection, host, port, localAddress }) ->
+          id = (crypto.randomBytes 3).toString 'hex'
 
-            console.log """
-              #{colog.yellow id} - Received connection to #{colog.cyan "#{host}:#{port}"}, dispatching to #{colog.cyan "#{localAddress.address}@#{localAddress.priority}"}.
-            """
+          emit 'request', "[#{id}] <a>#{host}</><b>:#{port}</>"
+          emit 'dispatch', "[#{id}] <a>#{localAddress}</>"
 
-            server
-              .on 'connect', ->
-                console.log """
-                  #{colog.green id} - Successfully connected to #{colog.cyan "#{host}:#{port}"} (#{colog.cyan "#{server.remoteAddress}:#{server.remotePort}"}) from #{colog.cyan "#{server.localAddress}:#{server.localPort}"}.
-                """
+          serverConnection
+            .on 'connect', ->
+              emit 'connect', "[#{id}] <a>#{host}</><b>:#{port}</>"
 
-              .on 'error', (err) ->
-                console.log """
-                  #{colog.red id} - serverConnection error
-                  #{'         ' + (err.stack.replace /\n/g, '\n         ')}
-                """
+            .on 'error', (err) ->
+              emit 'error', "[#{id}] serverConnection\n#{err.stack}"
 
-              .on 'end', ->
-                console.log """
-                  #{colog.yellow id} - serverConnection ended
-                """
+            .on 'end', ->
+              emit 'end', "[#{id}] serverConnection"
 
-            client
-              .on 'error', (err) ->
-                console.log """
-                  #{colog.red id} - clientConnection error
-                  #{'         ' + (err.stack.replace /\n/g, '\n         ')}
-                """
+          clientConnection
+            .on 'error', (err) ->
+              emit 'error', "[#{id}] clientConnection\n#{err.stack}"
 
-              .on 'end', ->
-                console.log """
-                  #{colog.yellow id} - clientConnection ended
-                """
+            .on 'end', ->
+              emit 'end', "[#{id}] clientConnection"
 
-          .on 'error', (err) ->
-            console.log """
-              #{colog.red "server error"}
-              #{err.stack}
-            """
+        .on 'error', (err) ->
+          emit 'error', "server\n#{err.stack}", raw: true
 
-    console.log """
-      #{type} server started on #{colog.green "#{host}:#{port}"}
-      Dispatching to addresses #{(colog.cyan "#{address}@#{priority}" for { address, priority } in addresses).join ', '}
+        .on 'clientError', (err, data) ->
+          emit 'error', "client\n#{err.message}\nReceived:\n#{data}", raw: true
+
+    log """
+      <bold-magenta>#{type}</> server started on <a>#{host}</><b>:#{port}</>
+      Dispatching to addresses #{("<a>#{address}</><b>@#{priority}</>" for { address, priority } in addresses).join ', '}
     """
 
 program.parse process.argv
