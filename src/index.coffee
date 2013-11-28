@@ -52,7 +52,7 @@ program
   .option('-H, --host <h>', 'which host to accept connections from (defaults to localhost)', String)
   .option('-p, --port <p>', 'which port to listen to for connections (defaults to 8080 for HTTP proxy, 1080 for SOCKS proxy)', Number)
   .option('--http', 'start an http proxy server', Boolean)
-  .option('--debug', 'logs connections and errors', Boolean)
+  .option('--debug', 'log debug info in the console', Boolean)
   .action (args..., { port, host, http, https, debug }) ->
     logger.setMode 'debug' if debug
 

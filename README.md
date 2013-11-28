@@ -46,7 +46,7 @@ $ dispatch start -h
     -H, --host <h>  which host to accept connections from (defaults to localhost)
     -p, --port <p>  which port to listen to for connections (defaults to 8080 for HTTP proxy, 1080 for SOCKS proxy)
     --http          start an http proxy server
-    --debug         logs connections and errors
+    --debug         log debug info in the console
 ```
 Examples
 --------
