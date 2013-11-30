@@ -6,13 +6,16 @@ Rationale
 You often find yourself with multiple unused internet connections, be it a 3G/4G mobile subscription or a free wifi hotspot, that your system wont let you use together with your main one.
 
 For example, my residence provides me with a cabled and wireless internet access. Both are capped at 1,200kB/s download/upload speed, but they can simultaneously run at full speed. My mobile internet access also provides me with 400kB/s download/upload speed. Combine all these with `dispatch` and a threaded download manager and you get a 2,800kB/s download and upload speed limit, which is considerably better :)
+
 Use-cases
 ---------
 The possibilities are endless:
+
 * download a file through threaded downloading, effectively combining multiple connections' speed in one single file download,
 * create two proxies, assign to each its own interface, and run two apps simultaneously that use a different interface,
 * create a hotspot proxy at home that connects through Ethernet and your 4G card for all your mobile devices,
 * etc.
+
 Installation
 ------------
 You'll need to have Node.JS installed on your system.
