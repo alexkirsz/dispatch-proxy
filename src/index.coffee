@@ -1,5 +1,5 @@
 os = require 'os'
-{ print } = require 'util'
+{ inspect } = require 'util'
 crypto = require 'crypto'
 program = require 'commander'
 Logger = require './logger'
@@ -7,13 +7,12 @@ Dispatcher = require './dispatcher'
 SocksProxy = require './proxy/socks'
 HttpProxy = require './proxy/http'
 
-logger = { log, emit } = new Logger(tab: 10)
-  .registerStyle('default', ['grey'])
+logger = { log, emit, format } = new Logger(tab: 10, gutter: ' ')
   .registerStyle('b', ['bold'])
   .registerStyle('s', ['green']) # Success
   .registerStyle('i', ['cyan']) # Info
   .registerStyle('e', ['red']) # Error
-  .registerStyle('a', ['b', 'black']) # Address
+  .registerStyle('a', ['b', 'underline']) # Address
 
   .registerEvent('request', '<b-i>request')
   .registerEvent('dispatch', '<b-i>dispatch')
@@ -35,13 +34,13 @@ program
     interfaces = os.networkInterfaces()
 
     for name, addrs of interfaces
-      log "<green>#{name}</green>"
+      log "<b>#{name}"
 
       for { address, family, internal } in addrs
         opts = []
         opts.push family if family
         opts.push 'internal' if internal
-        log "    <a>#{address}</>" + if opts.length > 0 then " <i>(#{opts.join ', '})</>" else ''
+        log "    <a>#{address}</>" + if opts.length > 0 then " (#{opts.join ', '})" else ''
 
       log ''
 
@@ -87,20 +86,20 @@ program
               emit 'response', "[#{id}] <magenta-b>#{serverResponse.statusCode}</>"
 
             .on 'error', (err) ->
-              emit 'error', "[#{id}] serverRequest\n#{err.stack}"
+              emit 'error', "[#{id}] clientRequest\n#{escape err.stack}"
 
             .on 'end', ->
               emit 'end', "[#{id}] serverRequest"
 
           clientRequest
             .on 'error', (err) ->
-              emit 'error', "[#{id}] clientRequest\n#{err.stack}"
+              emit 'error', "[#{id}] clientRequest\n#{escape err.stack}"
 
             .on 'end', ->
               emit 'end', "[#{id}] clientRequest"
 
         .on 'error', (err) ->
-          emit 'error', "server\n#{err.stack}", raw: true
+          emit 'error', "server\n#{escape err.stack}"
 
     else
       port or= 1080
@@ -119,23 +118,23 @@ program
               emit 'connect', "[#{id}] <a>#{host}</><b>:#{port}</>"
 
             .on 'error', (err) ->
-              emit 'error', "[#{id}] serverConnection\n#{err.stack}"
+              emit 'error', "[#{id}] serverConnection\n#{escape err.stack}"
 
             .on 'end', ->
               emit 'end', "[#{id}] serverConnection"
 
           clientConnection
             .on 'error', (err) ->
-              emit 'error', "[#{id}] clientConnection\n#{err.stack}"
+              emit 'error', "[#{id}] clientConnection\n#{escape err.stack}"
 
             .on 'end', ->
               emit 'end', "[#{id}] clientConnection"
 
         .on 'error', (err) ->
-          emit 'error', "server\n#{err.stack}", raw: true
+          emit 'error', "server\n#{escape err.stack}"
 
         .on 'clientError', (err, data) ->
-          emit 'error', "client\n#{err.message}\nReceived:\n#{data}", raw: true
+          emit 'error', "client\n#{escape err.message}\n<b>Received:</>\n#{escape (inspect data)}\n#{escape data.toString()}"
 
     log """
       <bold-magenta>#{type}</> server started on <a>#{host}</><b>:#{port}</>
