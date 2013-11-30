@@ -2,6 +2,8 @@ dispatch-proxy
 ==============
 A SOCKS5/HTTP proxy that balances traffic between multiple internet connections.
 
+*Works on Mac OS X, Windows and Linux.*
+
 Installation
 ------------
 You'll need to have Node.JS >= 0.10.0 installed on your system.
