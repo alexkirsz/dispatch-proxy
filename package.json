@@ -2,7 +2,7 @@
   "name": "dispatch-proxy",
   "description": "A SOCKS5/HTTP proxy that balances traffic between multiple internet connections.",
   "author": "Alexandre Kirszenberg <a.kirszenberg@gmail.com>",
-  "version": "0.0.8",
+  "version": "0.0.9",
 
   "repository": {
     "type": "git",
