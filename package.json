@@ -30,6 +30,8 @@
     "node": ">=0.10.0"
   },
 
+  "engineStrict": true,
+
   "dependencies": {
     "commander": "2.0.0"
   },
