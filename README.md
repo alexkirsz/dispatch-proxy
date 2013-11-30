@@ -2,7 +2,7 @@ dispatch-proxy
 ==============
 A SOCKS5/HTTP proxy that balances traffic between multiple internet connections.
 
-*Works on Mac OS X, Windows and Linux.*
+*Works on <b>Mac OS X</b>, <b>Windows</b> and <b>Linux</b>.*
 
 Installation
 ------------
@@ -25,6 +25,7 @@ Use-cases
 ---------
 The possibilities are endless:
 
+* combine as many Wi-Fi networks/Ethernet/3G/4G connections as have access to in one big, load balanced connection,
 * use it in conjunction with a threaded download manager, effectively combining multiple connections' speed in single file downloads,
 * create two proxies, assign to each its own interface, and run two apps simultaneously that use a different interface,
 * create a hotspot proxy at home that connects through Ethernet and your 4G card for all your mobile devices,
