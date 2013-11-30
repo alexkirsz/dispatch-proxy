@@ -14,7 +14,7 @@
   },
 
   "scripts": {
-    "pre-publish": "grunt"
+    "prepublish": "grunt"
   },
 
   "dependencies": {
