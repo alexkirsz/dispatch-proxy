@@ -1,6 +1,18 @@
 dispatch-proxy
 ==============
 A SOCKS5/HTTP proxy that balances traffic between multiple internet connections.
+
+Installation
+------------
+You'll need to have Node.JS >= 0.10.0 installed on your system.
+```
+$ npm install -g dispatch-proxy
+```
+To update:
+```
+$ npm update -g dispatch-proxy
+```
+
 Rationale
 ---------
 You often find yourself with multiple unused internet connections, be it a 3G/4G mobile subscription or a free wifi hotspot, that your system wont let you use together with your main one.
@@ -11,16 +23,11 @@ Use-cases
 ---------
 The possibilities are endless:
 
-* download a file through threaded downloading, effectively combining multiple connections' speed in one single file download,
+* use it in conjunction with a threaded download manager, effectively combining multiple connections' speed in single file downloads,
 * create two proxies, assign to each its own interface, and run two apps simultaneously that use a different interface,
 * create a hotspot proxy at home that connects through Ethernet and your 4G card for all your mobile devices,
 * etc.
 
-Installation
-------------
-You'll need to have Node.JS installed on your system.
-
-Then, as a power user run `$ npm install -g dispatch-proxy`.
 Quick start
 -----------
 The module provides a simple command-line utility called `dispatch`.
@@ -28,6 +35,7 @@ The module provides a simple command-line utility called `dispatch`.
 $ dispatch start
 ```
 Start a SOCKS proxy server on `localhost:1080`. Simply add this address as a SOCKS proxy in your system settings and your traffic will be automatically balanced between all available internet connections.
+
 Usage
 -----
 ```
@@ -58,6 +66,7 @@ $ dispatch start -h
     --http          start an http proxy server
     --debug         log debug info in the console
 ```
+
 Examples
 --------
 ```
