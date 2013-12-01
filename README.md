@@ -31,7 +31,7 @@ The possibilities are endless:
 
 * combine as many Wi-Fi networks/Ethernet/3G/4G connections as have access to in one big, load balanced connection,
 * use it in conjunction with a threaded download manager, effectively combining multiple connections' speed in single file downloads,
-* create two proxies, assign to each its own interface, and run two apps simultaneously that use a different interface,
+* create two proxies, assign to each its own interface, and run two apps simultaneously that use a different interface (e.g. for balancing download/upload),
 * create a hotspot proxy at home that connects through Ethernet and your 4G card for all your mobile devices,
 * etc.
 
