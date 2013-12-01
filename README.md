@@ -4,6 +4,10 @@ A SOCKS5/HTTP proxy that balances traffic between multiple internet connections.
 
 *Works on <b>Mac OS X</b>, <b>Windows</b> and <b>Linux</b>.*
 
+**Detailed installation instructions:**
+
+* Max OS X: [imgur album](http://imgur.com/a/TSD5F)
+
 Installation
 ------------
 You'll need to have Node.JS >= 0.10.0 installed on your system.
