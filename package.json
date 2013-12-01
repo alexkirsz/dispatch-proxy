@@ -3,6 +3,7 @@
   "description": "A SOCKS5/HTTP proxy that balances traffic between multiple internet connections.",
   "author": "Alexandre Kirszenberg <a.kirszenberg@gmail.com>",
   "version": "0.0.10",
+  "license": "MIT",
   "keywords": [
     "dispatch",
     "proxy",
