@@ -24,13 +24,15 @@ Rationale
 ---------
 You often find yourself with multiple unused internet connections, be it a 3G/4G mobile subscription or a free wifi hotspot, that your system wont let you use together with your main one.
 
-For example, my residence provides me with a cabled and wireless internet access. Both are capped at 1,200kB/s download/upload speed, but they can simultaneously run at full speed. My mobile internet access also provides me with 400kB/s download/upload speed. Combine all these with `dispatch` and a threaded download manager and you get a 2,800kB/s download and upload speed limit, which is considerably better :)
+For example, my residence provides me with a cabled and wireless internet access. Both are capped at 1,200kB/s download/upload speed, but they can simultaneously run at full speed. My mobile internet access also provides me with 400kB/s download/upload speed.
+
+Combine all of these with `dispatch` and a threaded download manager and you get a 2,800kB/s download and upload speed limit, which is considerably better :)
 
 Use-cases
 ---------
 The possibilities are endless:
 
-* combine as many Wi-Fi networks/Ethernet/3G/4G connections as have access to in one big, load balanced connection,
+* combine as many Wi-Fi networks/Ethernet/3G/4G connections as you have access to in one big, load balanced connection,
 * use it in conjunction with a threaded download manager, effectively combining multiple connections' speed in single file downloads,
 * create two proxies, assign to each its own interface, and run two apps simultaneously that use a different interface (e.g. for balancing download/upload),
 * create a hotspot proxy at home that connects through Ethernet and your 4G card for all your mobile devices,
