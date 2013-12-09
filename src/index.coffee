@@ -24,7 +24,7 @@ logger = new Logger(tab: 10, gutter: ' ')
   .registerMode('debug', true)
 
 program
-  .version('0.0.10')
+  .version('0.1.1')
 
 program
   .command('list')
