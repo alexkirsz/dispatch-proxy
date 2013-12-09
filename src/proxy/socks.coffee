@@ -1,45 +1,59 @@
 net = require 'net'
-{ EventEmitter } = require 'events'
-socks = require '../socks'
-{ STATUS } = require '../socks/const'
+socks = require 'socks-handler'
+Dispatcher = require '../dispatcher'
 
-module.exports = class SocksProxy extends EventEmitter
-  constructor: (dispatcher, listenPort, listenHost) ->
-    super
+module.exports = class SocksProxy extends Dispatcher
+  constructor: (addresses, listenPort, listenHost) ->
+    super addresses
 
-    @server = socks.createServer (clientConnection, host, port, callback) =>
-      localAddress = dispatcher.dispatch()
+    @server = net.createServer (clientConnection) =>
+      socks.handle clientConnection, (err, handler) =>
+        if err
+          @emit 'socksError', err
+          return
 
-      serverConnection = net.createConnection { host, port, localAddress }
+        handler.on 'error', (err) ->
+          @emit 'socksError', err
 
-      _responded = false
-      serverConnection
-        .on 'connect', =>
-          _responded = true
-          callback STATUS.SUCCESS
+        handler.on 'request', ({ version, command, host, port }, callback) =>
+          if command isnt socks[5].COMMAND.CONNECT
+            @emit 'socksError', new Error "Unsupported command: #{command}"
+            if version is 5
+              callback socks[5].REQUEST_STATUS.COMMAND_NOT_SUPPORTED
+            else
+              callback socks[4].REQUEST_STATUS.REFUSED
+            return
 
-        .on 'error', (err) =>
-          if not _responded
-            _responded = true
-            switch err.code
-              # Host unreachable
-              when 'EHOSTUNREACH' then callback STATUS.HOST_UNREACHABLE
-              # Connection refused
-              when 'ECONNREFUSED' then callback STATUS.CONNECTION_REFUSED
-              # Network unreachabke
-              when 'ENETUNREACH' then callback STATUS.NETWORK_UNREACHABLE
-              else callback STATUS.SERVER_FAILURE
+          localAddress = @dispatch()
+          serverConnection = net.createConnection { port, host, localAddress }
 
-        .on 'end', =>
-          dispatcher.free localAddress
+          clientConnection.pipe(serverConnection).pipe(clientConnection)
 
-      clientConnection.pipe serverConnection
-      serverConnection.pipe clientConnection
+          serverConnection
+            .on 'error', onConnectError = (err) ->
+              if version is 5
+                status =
+                  switch err.code
+                    when 'EHOSTUNREACH' then socks[5].REQUEST_STATUS.HOST_UNREACHABLE
+                    when 'ECONNREFUSED' then socks[5].REQUEST_STATUS.CONNECTION_REFUSED
+                    when 'ENETUNREACH' then socks[5].REQUEST_STATUS.NETWORK_UNREACHABLE
+                    else socks[5].REQUEST_STATUS.SERVER_FAILURE
+              else
+                status = socks[4].REQUEST_STATUS.FAILED
 
-      @emit 'request', { serverConnection, clientConnection, host, port, localAddress }
+              callback status
+
+            .on 'connect', ->
+              serverConnection.removeListener 'error', onConnectError
+              status = if version is 5 then socks[5].REQUEST_STATUS.SUCCESS else socks[4].REQUEST_STATUS.GRANTED
+              callback status
+
+            .on 'end', =>
+              @free localAddress
+
+          @emit 'request', { clientConnection, serverConnection, host, port, localAddress }
 
     @server.on 'error', (err) => @emit 'error', err
-    @server.on 'clientError', (err, data) => @emit 'clientError', err, data
 
     @server.listen listenPort, listenHost
 

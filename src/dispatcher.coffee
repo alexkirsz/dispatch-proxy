@@ -1,9 +1,11 @@
-module.exports = class Dispatcher
+{ EventEmitter } = require 'events'
+
+module.exports = class Dispatcher extends EventEmitter
   constructor: (@addresses) ->
     @connectionsTotal = 0
     @connectionsByAddress = {}
   
-  prioritiesSum: ->
+  _prioritiesSum: ->
     (priority for { priority } in @addresses).reduce (a, b) -> a + b
 
   dispatch: ->
@@ -14,7 +16,7 @@ module.exports = class Dispatcher
 
     for address in @addresses
       currentRatio = (@connectionsByAddress[address.address] / @connectionsTotal) or 0
-      priorityRatio = address.priority / @prioritiesSum()
+      priorityRatio = address.priority / @_prioritiesSum()
       ratioDiff = priorityRatio - currentRatio
 
       if ratioDiff > maxRatioDiff
@@ -26,13 +28,13 @@ module.exports = class Dispatcher
 
     # If the maxDiff approaches zero, it means that all address priorities are currently respected.
     if maxRatioDiff < 0.000001
-      @_dispatch prevailingAddress
+      @_increment prevailingAddress
       return prevailingAddress
     else
-      @_dispatch availableAddress
+      @_increment availableAddress
       return availableAddress
 
-  _dispatch: (address) ->
+  _increment: (address) ->
     @connectionsByAddress[address] or= 0
     @connectionsByAddress[address]++
     @connectionsTotal++

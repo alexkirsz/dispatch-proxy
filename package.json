@@ -34,7 +34,9 @@
   "engineStrict": true,
 
   "dependencies": {
-    "commander": "2.0.0"
+    "commander": "2.0.0",
+    "socks-handler": "0.2.0",
+    "tmpl-log": "0.0.3"
   },
 
   "devDependencies": {
