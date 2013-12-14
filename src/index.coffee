@@ -24,7 +24,7 @@ logger = new Logger(tab: 10, gutter: ' ')
   .registerMode('debug', true)
 
 program
-  .version('0.1.1')
+  .version('0.1.2')
 
 program
   .command('list')
@@ -81,7 +81,7 @@ program
 
           serverRequest
             .on 'response', (serverResponse) ->
-              logger.emit 'response', "[#{id}] <magenta-b>#{serverResponse.statusCode}</>"
+              logger.emit 'response', "[#{id}] <magenta><b>#{serverResponse.statusCode}</></>"
 
             .on 'error', (err) ->
               logger.emit 'error', "[#{id}] clientRequest\n#{escape err.stack}"
