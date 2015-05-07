@@ -24,7 +24,7 @@ logger = new Logger(tab: 10, gutter: ' ')
   .registerMode('debug', true)
 
 program
-  .version('0.1.2')
+  .version(require('../package.json').version)
 
 program
   .command('list')
