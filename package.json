@@ -2,7 +2,7 @@
   "name": "dispatch-proxy",
   "description": "A SOCKS5/HTTP proxy that balances traffic between multiple internet connections.",
   "author": "Alexandre Kirszenberg <a.kirszenberg@gmail.com>",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "license": "MIT",
   "keywords": [
     "dispatch",
@@ -13,32 +13,25 @@
     "load",
     "balancer"
   ],
-
   "repository": {
     "type": "git",
     "url": "git@github.com:morhaus/dispatch-proxy.git"
   },
-
   "bin": {
     "dispatch": "./bin/dispatch.js"
   },
-
   "scripts": {
     "prepublish": "grunt"
   },
-
   "engines": {
     "node": ">=0.10.0"
   },
-
   "engineStrict": true,
-
   "dependencies": {
     "commander": "2.0.0",
     "socks-handler": "0.2.1",
     "tmpl-log": "0.0.3"
   },
-
   "devDependencies": {
     "grunt": "*",
     "grunt-cli": "*",
