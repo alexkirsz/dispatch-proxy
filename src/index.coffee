@@ -5,6 +5,7 @@ program = require 'commander'
 Logger = require 'tmpl-log'
 SocksProxy = require './proxy/socks'
 HttpProxy = require './proxy/http'
+pkg = require '../package'
 
 logger = new Logger(tab: 10, gutter: ' ')
   .registerTag('b', ['bold'])
@@ -24,7 +25,7 @@ logger = new Logger(tab: 10, gutter: ' ')
   .registerMode('debug', true)
 
 program
-  .version('0.1.2')
+  .version(pkg.version)
 
 program
   .command('list')
