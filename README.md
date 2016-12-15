@@ -44,7 +44,7 @@ The module provides a simple command-line utility called `dispatch`.
 ```
 $ dispatch start
 ```
-Start a SOCKS proxy server on `localhost:1080`. Simply add this address as a SOCKS proxy in your system settings and your traffic will be automatically balanced between all available internet connections.
+Start a SOCKS proxy server on `localhost:1080`. Simply add this address as a SOCKS proxy in your system settings for each of the network interfaces and your traffic will be automatically balanced between all available internet connections.
 
 Usage
 -----
