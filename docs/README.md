@@ -12,6 +12,25 @@ Node.JS >= 0.10.0
 * Windows: [imgur album](http://imgur.com/a/0snis)
 * Mac OS X: [imgur album](http://imgur.com/a/TSD5F)
 
+## Help and Support
+Please check out the documentation and FAQ first. We do not offer support but if you find a bug, you are more than welcome to open an issue.
+
+### FAQ: ###
+**Q:**
+**A:**
+
+**Q:**
+**A:**
+
+**Q:**
+**A:**
+
+**Q:**
+**A:**
+
+**Q:**
+**A:**
+
 ## Contributing
 So you like this project and want to make the world of internet even faster? That's awesome! In below we have provided some basic guidelines to help you contribute easier.
 
