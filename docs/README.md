@@ -16,13 +16,13 @@ Dispatch-proxy is a SOCKS5/HTTP proxy that balances traffic between multiple int
 Please check out the documentation and FAQ first. We do not offer support but if you find a bug, you are more than welcome to open an issue.
 
 ### FAQ: ###
-**Q:** Can I run on a router?
+**Q: Can I run on a router?**
 
 **A:** It would be difficult to run this proxy on a wireless router, including a router configured as repeater because most of the routers on the market can only work at AP mode or Repeater mode. Thus a router generally saying cannot route packets through Ethernet and wireless connection to another AP at the same time.
 
 It has been a long time since you asked. But if you are still interested, I strongly encourage you to test running this project on a router which you have ssh access to. Please do let us know if any success!
 
-**Q:** I'm just curious, but how does this work?
+**Q: I'm just curious, but how does this work?**
 
 **A:** Dispatch-proxy balances traffic between connections. When you upload a youtube video, you establish a single HTTP connection between you and a youtube server. But if you were to upload two videos at the same time, you could potentially use both your interfaces.
 
@@ -30,11 +30,11 @@ The current load balancing algorithm is very simple and looks at the number of l
 
 At the moment the SOCKS proxy supports TCP CONNECT command, which means basically all TCP operations, but has no support for UDP BIND (UDP) yet.
 
-**Q:** Can I proxy a VPN by connecting to the same VPN server using multiple connections?
+**Q: Can I proxy a VPN by connecting to the same VPN server using multiple connections?**
 
 **A:** Unfortunately it's not possible.
 
-**Q:** Can I share the proxy with others?
+**Q: Can I share the proxy with others?**
 
 **A:** If all devices are connected to the same network and upon correctly configured firewall rules, yes. However we do not provide any support at this.
 
@@ -81,6 +81,21 @@ Any other info e.g. Why do you consider this to be a bug? What did you expect to
 ```
 
 ### Feature Request
+If you have ideas, feel free to open an issue and tell us all about it!
+
+Request template:
+```sh
+Short and descriptive example feature request title
+
+### Summary
+
+A summary of the your idea and how it would work.
+
+### Use case model
+As... (a game streamer)
+I want... (make use of two internet connections, both at 100 Mbps upload)
+Because... (I need at least 120 Mbps to stream in 4k at 144 fps)
+```
 
 ### Change Request
 
