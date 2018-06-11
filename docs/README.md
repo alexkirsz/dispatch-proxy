@@ -17,11 +17,13 @@ Please check out the documentation and FAQ first. We do not offer support but if
 
 ### FAQ: ###
 **Q:** Can I run on a router?
+
 **A:** It would be difficult to run this proxy on a wireless router, including a router configured as repeater because most of the routers on the market can only work at AP mode or Repeater mode. Thus a router generally saying cannot route packets through Ethernet and wireless connection to another AP at the same time.
 
 It has been a long time since you asked. But if you are still interested, I strongly encourage you to test running this project on a router which you have ssh access to. Please do let us know if any success!
 
 **Q:** I'm just curious, but how does this work?
+
 **A:** Dispatch-proxy balances traffic between connections. When you upload a youtube video, you establish a single HTTP connection between you and a youtube server. But if you were to upload two videos at the same time, you could potentially use both your interfaces.
 
 The current load balancing algorithm is very simple and looks at the number of live connections owned by each interface to determine which interface to dispatch the next connection to (respecting priorities set via the @ syntax). In the future it will look at the total traffic of those connections.
@@ -29,9 +31,11 @@ The current load balancing algorithm is very simple and looks at the number of l
 At the moment the SOCKS proxy supports TCP CONNECT command, which means basically all TCP operations, but has no support for UDP BIND (UDP) yet.
 
 **Q:** Can I proxy a VPN by connecting to the same VPN server using multiple connections?
+
 **A:** Unfortunately it's not possible.
 
 **Q:** Can I share the proxy with others?
+
 **A:** If all devices are connected to the same network and upon correctly configured firewall rules, yes. However we do not provide any support at this.
 
 ## Contributing
