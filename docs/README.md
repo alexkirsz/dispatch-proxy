@@ -98,5 +98,17 @@ Because... (I need at least 120 Mbps to stream in 4k at 144 fps)
 ```
 
 ### Change Request
+Change requests cover both architectural and functional changes to how Ghost works. If you have an idea for a new or different dependency, a refactor, or an improvement to a feature, etc - please be sure to:
+
+1. Use the GitHub search and check someone else didn't get there first
+
+2. Take a moment to think about the best way to make a case for, and explain what you're thinking as it's up to you to convince the project's leaders the change is worthwhile. Some questions to consider are:
+
+* Is it really one idea or is it many?
+* What problem are you solving?
+* Why is what you are suggesting better than what's already there?
+
+
+
 
 ### Submitting Pull Request
