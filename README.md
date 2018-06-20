@@ -7,7 +7,7 @@ A SOCKS5/HTTP proxy that balances traffic between multiple internet connections.
 **Detailed installation instructions:**
 
 * Windows: [imgur album](http://imgur.com/a/0snis)
-* Max OS X: [imgur album](http://imgur.com/a/TSD5F)
+* Mac OS X: [imgur album](http://imgur.com/a/TSD5F)
 
 Installation
 ------------
