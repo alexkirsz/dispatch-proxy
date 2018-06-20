@@ -107,8 +107,3 @@ Change requests cover both architectural and functional changes to how Ghost wor
 * Is it really one idea or is it many?
 * What problem are you solving?
 * Why is what you are suggesting better than what's already there?
-
-
-
-
-### Submitting Pull Request
