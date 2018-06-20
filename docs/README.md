@@ -98,7 +98,7 @@ Because... (I need at least 120 Mbps to stream in 4k at 144 fps)
 ```
 
 ### Change Request
-Change requests cover both architectural and functional changes to how Ghost works. If you have an idea for a new or different dependency, a refactor, or an improvement to a feature, etc - please be sure to:
+Change requests cover both architectural and functional changes to how dispatch-proxy works. If you have an idea for a new or different dependency, a refactor, or an improvement to a feature, etc - please be sure to:
 
 1. Use the GitHub search and check someone else didn't get there first
 
