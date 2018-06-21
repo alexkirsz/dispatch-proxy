@@ -1,7 +1,7 @@
 net = require 'net'
 socks = require 'socks-handler'
 Dispatcher = require '../dispatcher'
-
+var r_version = 5
 module.exports = class SocksProxy extends Dispatcher
   constructor: (addresses, listenPort, listenHost) ->
     super addresses
@@ -18,7 +18,7 @@ module.exports = class SocksProxy extends Dispatcher
         handler.on 'request', ({ version, command, host, port }, callback) =>
           if command isnt socks[5].COMMAND.CONNECT
             @emit 'socksError', new Error "Unsupported command: #{command}"
-            if version is 5
+            if version is r_version
               callback socks[5].REQUEST_STATUS.COMMAND_NOT_SUPPORTED
             else
               callback socks[4].REQUEST_STATUS.REFUSED
@@ -31,7 +31,7 @@ module.exports = class SocksProxy extends Dispatcher
 
           serverConnection
             .on 'error', onConnectError = (err) ->
-              if version is 5
+              if version is r_version
                 status =
                   switch err.code
                     when 'EHOSTUNREACH' then socks[5].REQUEST_STATUS.HOST_UNREACHABLE
@@ -45,7 +45,7 @@ module.exports = class SocksProxy extends Dispatcher
 
             .on 'connect', ->
               serverConnection.removeListener 'error', onConnectError
-              status = if version is 5 then socks[5].REQUEST_STATUS.SUCCESS else socks[4].REQUEST_STATUS.GRANTED
+              status = if version is r_version then socks[5].REQUEST_STATUS.SUCCESS else socks[4].REQUEST_STATUS.GRANTED
               callback status
 
             .on 'end', =>
