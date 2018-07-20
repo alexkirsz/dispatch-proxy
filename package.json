@@ -21,22 +21,20 @@
     "dispatch": "./bin/dispatch.js"
   },
   "scripts": {
-    "prepublish": "grunt"
+    "prepare": "babel src --out-dir lib",
+    "watch": "babel src --watch --out-dir lib"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=8.0.0"
   },
   "engineStrict": true,
   "dependencies": {
-    "commander": "2.0.0",
+    "commander": "2.16.0",
     "socks-handler": "0.2.1",
     "tmpl-log": "0.0.3"
   },
   "devDependencies": {
-    "grunt": "*",
-    "grunt-cli": "*",
-    "grunt-contrib-watch": "*",
-    "grunt-contrib-coffee": "*",
-    "grunt-contrib-clean": "*"
+    "babel-cli": "6.26.0",
+    "babel-preset-env": "^1.7.0"
   }
 }
