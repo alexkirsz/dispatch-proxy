@@ -12,11 +12,28 @@ program.command("echo <arg>").action(arg => {
   logger.emit("echo", `echoing "${arg}"`);
 });
 
-program.command('list')
+program
+  .command('list')
   .description('list all available network interfaces')
   .action(function() {
-    console.log("listing interfaces:");
-    console.log(OS.networkInterfaces());
+    const interfaces = OS.networkInterfaces();
+    console.log("listing interfaces:\n");
+
+    for (let name in interfaces) {
+      logger.log (`<b> ${name}`);
+
+      for (let i = 0; i < interfaces[name].length; i++) {
+        let subInterface = interfaces[name][i];
+        let subInterfaceAddress = interfaces[name][i].adress;
+
+        let { address, family, internal } = subInterface;
+        if (internal === true) {
+          internal = 'Internal';
+        } else internal = 'External';
+        logger.log (`     ${address} (${family}, ${internal})\n`);
+
+      }
+    }
   });
 
 
