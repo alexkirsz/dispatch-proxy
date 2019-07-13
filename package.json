@@ -2,6 +2,7 @@
   "name": "dispatch-proxy",
   "description": "A SOCKS5/HTTP proxy that balances traffic between multiple internet connections.",
   "author": "Alexandre Kirszenberg <a.kirszenberg@gmail.com>",
+  "contributor": "Roderick Karlemstrand <roderick@karlemstrand.com>",
   "version": "0.1.4",
   "license": "MIT",
   "keywords": [
@@ -22,7 +23,8 @@
   },
   "scripts": {
     "prepare": "babel src --out-dir lib",
-    "watch": "babel src --watch --out-dir lib"
+    "watch": "babel src --watch --out-dir lib",
+    "build": "babel src -d lib"
   },
   "engines": {
     "node": ">=8.0.0"
