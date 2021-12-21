@@ -22,7 +22,7 @@ $ npm update -g dispatch-proxy
 
 Rationale
 ---------
-You often find yourself with multiple unused internet connections, be it a 3G/4G mobile subscription or a free wifi hotspot, that your system wont let you use together with your main one.
+You often find yourself with multiple unused internet connections, be it a 3G/4G mobile subscription or a free wifi hotspot, that your system won't let you use together with your main one.
 
 For example, my residence provides me with a cabled and wireless internet access. Both are capped at 1,200kB/s download/upload speed, but they can simultaneously run at full speed. My mobile internet access also provides me with 400kB/s download/upload speed.
 
